@@ -1,37 +1,70 @@
 from board import Board
 
 
+DIFFICULTIES = {
+    "easy": (6, 6, 6),
+    "medium": (8, 8, 12),
+    "hard": (10, 10, 20),
+}
+
+
 class Minesweeper:
-    def __init__(self):
-        self.board = Board()
+    def __init__(self, difficulty="easy"):
+        rows, cols, mines = DIFFICULTIES[difficulty]
+        self.difficulty = difficulty
+        self.board = Board(rows, cols, mines)
 
     def display(self, reveal_mines=False):
-        b = self.board
-        print("\n   " + " ".join(str(c + 1) for c in range(b.cols)))
+        print(f"\nDifficulty: {self.difficulty.capitalize()}")
+        print(f"Board: {self.board.rows}x{self.board.cols} | Mines: {self.board.mine_total}")
 
-        for r in range(b.rows):
-            cells = []
+        print("   " + " ".join(f"{c:2}" for c in range(1, self.board.cols + 1)))
 
-            for c in range(b.cols):
+        for r in range(self.board.rows):
+            row = []
+            for c in range(self.board.cols):
                 pos = (r, c)
 
-                if reveal_mines and pos in b.mines:
-                    ch = "*"
-                elif pos in b.flags:
-                    ch = "F"
-                elif pos not in b.revealed:
-                    ch = "#"
-                elif pos in b.mines:
-                    ch = "*"
+                if reveal_mines and pos in self.board.mines:
+                    cell = "*"
+                elif pos in self.board.flags:
+                    cell = "F"
+                elif pos not in self.board.revealed:
+                    cell = "#"
                 else:
-                    ch = str(b.adjacent_mines(r, c))
+                    mines = self.board.adjacent_mines(r, c)
+                    cell = str(mines) if mines else "."
 
-                cells.append(ch)
+                row.append(f"{cell:2}")
 
-            print(f"{r + 1:2} " + " ".join(cells))
+            print(f"{r + 1:2} " + " ".join(row))
+
+    def choose_difficulty(self):
+        print("Choose difficulty:")
+        print("1. Easy   - 6x6, 6 mines")
+        print("2. Medium - 8x8, 12 mines")
+        print("3. Hard   - 10x10, 20 mines")
+
+        while True:
+            choice = input("Difficulty (1/2/3): ").strip().lower()
+
+            if choice in {"1", "easy"}:
+                return "easy"
+            if choice in {"2", "medium"}:
+                return "medium"
+            if choice in {"3", "hard"}:
+                return "hard"
+
+            print("Invalid difficulty. Choose 1, 2, or 3.")
 
     def run(self):
-        print("Minesweeper")
+        difficulty = self.choose_difficulty()
+        self.difficulty = difficulty
+
+        rows, cols, mines = DIFFICULTIES[difficulty]
+        self.board = Board(rows, cols, mines)
+
+        print("\nMinesweeper")
         print("Commands: r row col | f row col | q")
 
         while True:
