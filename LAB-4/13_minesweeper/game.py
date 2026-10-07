@@ -73,21 +73,25 @@ class Minesweeper:
             raw = input("> ").strip().lower()
 
             if raw == "q":
+                print("Game ended.")
                 return
 
             parts = raw.split()
 
             if len(parts) != 3 or parts[0] not in {"r", "f"}:
+                print("Action: Invalid command.")
                 print("Use r row col or f row col.")
                 continue
 
             try:
                 r, c = int(parts[1]) - 1, int(parts[2]) - 1
             except ValueError:
+                print("Action: Invalid coordinates.")
                 print("Coordinates must be numbers.")
                 continue
 
             if not self.board.in_bounds(r, c):
+                print(f"Action: {parts[0].upper()} ({r + 1}, {c + 1}) rejected - outside the board.")
                 print("Outside the board.")
                 continue
 
@@ -95,8 +99,14 @@ class Minesweeper:
 
             if parts[0] == "f":
                 if not self.board.toggle_flag(pos):
+                    print(f"Action: Flag ({r + 1}, {c + 1}) rejected - cell is already revealed.")
                     print("Cannot flag a revealed cell.")
+                else:
+                    state = "flagged" if pos in self.board.flags else "unflagged"
+                    print(f"Action: Flag ({r + 1}, {c + 1}) -> {state}.")
                 continue
+
+            print(f"Action: Reveal ({r + 1}, {c + 1}).")
 
             if self.board.reveal(pos):
                 self.display(reveal_mines=True)
