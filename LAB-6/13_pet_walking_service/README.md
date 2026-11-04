@@ -45,3 +45,20 @@ The expanded code-coverage test file was validated at 100% line coverage (17 tes
 The expanded branch-coverage test file was validated at 100% combined coverage (23 tests, 40/40 branches).
 
 Re-run the commands on your machine and capture your own terminal screenshots for submission.
+
+## Coverage Results
+
+### Code Coverage
+- Tests passed: 17
+- Statement coverage: 100%
+
+### Branch Coverage
+- Tests passed: 23
+- Statements covered: 57/57
+- Branches covered: 40/40
+- Missing branches: 0
+- Branch coverage: 100%
+
+### Screenshots
+- `screenshots/code_coverage.png`
+- `screenshots/branch_coverage.png`
